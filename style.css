@@ -187,7 +187,30 @@ p {
 }
 
 .top-right { top: 20px; right: 20px; max-width: 250px; }
+.top-left { top: 20px; left: 20px; }
 .bottom-left { bottom: 20px; left: 20px; }
+
+.debug-panel {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--glass-border);
+    font-family: monospace;
+    font-size: 0.7rem;
+    display: flex;
+    gap: 10px;
+}
+
+#zoom-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 120px;
+}
+
+#zoom-slider {
+    width: 100%;
+    cursor: pointer;
+}
 
 .mobile-only {
     display: none;
@@ -260,7 +283,16 @@ p {
     50% { transform: rotate(45deg); }
 }
 
-#fullscreen-btn {
+.controls-row {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    pointer-events: all;
+}
+
+#view-mode-btn, #fullscreen-btn {
     width: 50px;
     height: 50px;
     display: flex;
@@ -269,11 +301,8 @@ p {
     font-size: 1.5rem;
     cursor: pointer;
     border: 1px solid var(--glass-border);
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    pointer-events: all;
 }
+
 
 @media (max-width: 768px) and (orientation: portrait) {
     .glass-card {

@@ -60,10 +60,27 @@
                 <div class="stats-panel glass-panel bottom-left">
                     <div id="score-container">Score: <span id="score">0</span></div>
                     <div id="discovery-status">Discovered: <span id="discovered">0</span>/8</div>
+                    <!-- Sensor Debug (Local Only) -->
+                    <div id="sensor-debug" class="debug-panel">
+                        <div>α: <span id="val-alpha">0</span></div>
+                        <div>β: <span id="val-beta">0</span></div>
+                        <div>γ: <span id="val-gamma">0</span></div>
+                    </div>
                 </div>
-                <button id="fullscreen-btn" class="glass-panel bottom-right mobile-only">
-                    <span class="icon">⛶</span>
-                </button>
+                <!-- Zoom Controls -->
+                <div id="zoom-controls" class="glass-panel top-left">
+                    <label>Zoom</label>
+                    <input type="range" id="zoom-slider" min="30" max="100" value="70">
+                </div>
+                <!-- Controls Row -->
+                <div class="controls-row bottom-right">
+                    <button id="view-mode-btn" class="glass-panel">
+                        <span class="icon">🕶️</span>
+                    </button>
+                    <button id="fullscreen-btn" class="glass-panel mobile-only">
+                        <span class="icon">⛶</span>
+                    </button>
+                </div>
                 <div class="crosshair"></div>
 
             </div>

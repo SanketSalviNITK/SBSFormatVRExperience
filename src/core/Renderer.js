@@ -16,8 +16,15 @@ export class SBSRenderer {
         this.stereo = new THREE.StereoCamera();
         this.stereo.aspect = 0.5; // Each eye is half width
         this.stereo.eyeSep = 0.064; // IPD in meters
+
+        this.isStereo = true; // Default to SBS
         
         window.addEventListener('resize', () => this.onWindowResize());
+    }
+
+    setMode(stereo) {
+        this.isStereo = stereo;
+        this.onWindowResize(); // Refresh aspect ratios
     }
 
     onWindowResize() {
@@ -35,22 +42,29 @@ export class SBSRenderer {
 
         this.renderer.clear();
 
-        // Update stereo projection
-        this.stereo.update(this.camera);
+        if (this.isStereo) {
+            // Update stereo projection
+            this.stereo.update(this.camera);
 
-        // Render Left Eye
-        this.renderer.setScissorTest(true);
-        this.renderer.setScissor(0, 0, width / 2, height);
-        this.renderer.setViewport(0, 0, width / 2, height);
-        this.renderer.render(scene, this.stereo.cameraL);
+            // Render Left Eye
+            this.renderer.setScissorTest(true);
+            this.renderer.setScissor(0, 0, width / 2, height);
+            this.renderer.setViewport(0, 0, width / 2, height);
+            this.renderer.render(scene, this.stereo.cameraL);
 
-        // Render Right Eye
-        this.renderer.setScissor(width / 2, 0, width / 2, height);
-        this.renderer.setViewport(width / 2, 0, width / 2, height);
-        this.renderer.render(scene, this.stereo.cameraR);
+            // Render Right Eye
+            this.renderer.setScissor(width / 2, 0, width / 2, height);
+            this.renderer.setViewport(width / 2, 0, width / 2, height);
+            this.renderer.render(scene, this.stereo.cameraR);
 
-        this.renderer.setScissorTest(false);
+            this.renderer.setScissorTest(false);
+        } else {
+            // Magic Window (Mono) Mode
+            this.renderer.setViewport(0, 0, width, height);
+            this.renderer.render(scene, this.camera);
+        }
     }
+
 
 
     getDomElement() {

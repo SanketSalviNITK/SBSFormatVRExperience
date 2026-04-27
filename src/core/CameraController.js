@@ -28,14 +28,28 @@ export class CameraController {
     onDeviceOrientation(event) {
         if (!this.enabled || !event.alpha) return;
 
+        // Store raw data for debugging
+        this.rawSensor = {
+            alpha: event.alpha.toFixed(2),
+            beta: event.beta.toFixed(2),
+            gamma: event.gamma.toFixed(2)
+        };
+
         // Convert degrees to radians
         const alpha = THREE.MathUtils.degToRad(event.alpha); // Z
         const beta = THREE.MathUtils.degToRad(event.beta);   // X
         const gamma = THREE.MathUtils.degToRad(event.gamma); // Y
 
-        // Basic mapping for landscape/portrait
-        // In mobile VR, we usually expect landscape
         this.targetRotation.set(beta, alpha, -gamma);
+    }
+
+    setZoom(fov) {
+        this.camera.fov = fov;
+        this.camera.updateProjectionMatrix();
+    }
+
+    getSensorData() {
+        return this.rawSensor || { alpha: 0, beta: 0, gamma: 0 };
     }
 
     onMouseMove(event) {

@@ -30,7 +30,12 @@ class App {
             targetDesc: document.getElementById('target-description'),
             startBtn: document.getElementById('start-btn'),
             calibrateBtn: document.getElementById('calibrate-btn'),
-            fullscreenBtn: document.getElementById('fullscreen-btn')
+            fullscreenBtn: document.getElementById('fullscreen-btn'),
+            viewModeBtn: document.getElementById('view-mode-btn'),
+            zoomSlider: document.getElementById('zoom-slider'),
+            valAlpha: document.getElementById('val-alpha'),
+            valBeta: document.getElementById('val-beta'),
+            valGamma: document.getElementById('val-gamma')
         };
 
         this.init();
@@ -41,12 +46,24 @@ class App {
         this.ui.calibrateBtn.addEventListener('click', () => this.startExperience());
         this.ui.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
         
+        this.ui.viewModeBtn.addEventListener('click', () => {
+            const isStereo = !this.sbsRenderer.isStereo;
+            this.sbsRenderer.setMode(isStereo);
+            this.ui.viewModeBtn.querySelector('.icon').innerText = isStereo ? '🕶️' : '📱';
+        });
+
+        this.ui.zoomSlider.addEventListener('input', (e) => {
+            this.cameraController.setZoom(parseFloat(e.target.value));
+        });
+
+        
         // Set initial camera position
         this.sbsRenderer.camera.position.set(0, 5, 20);
         this.sbsRenderer.camera.lookAt(0, 0, 0);
 
         this.animate();
     }
+
 
     toggleFullscreen() {
         if (!document.fullscreenElement) {
@@ -129,9 +146,18 @@ class App {
         this.solarSystem.update(time);
         this.cameraController.update();
         this.checkGaze();
+
+        // Update Debug Info
+        const sensor = this.cameraController.getSensorData();
+        if (this.ui.valAlpha) {
+            this.ui.valAlpha.innerText = sensor.alpha;
+            this.ui.valBeta.innerText = sensor.beta;
+            this.ui.valGamma.innerText = sensor.gamma;
+        }
         
         this.sbsRenderer.render(this.scene);
     }
+
 }
 
 new App();
