@@ -189,6 +189,30 @@ p {
 .top-right { top: 20px; right: 20px; max-width: 250px; }
 .bottom-left { bottom: 20px; left: 20px; }
 
+.mobile-only {
+    display: none;
+}
+
+@media (pointer: coarse) {
+    .mobile-only {
+        display: block;
+    }
+}
+
+#landscape-warning {
+    margin-top: 1rem;
+    padding: 10px;
+    background: rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.warning-text {
+    color: #fca5a5 !important;
+    font-size: 0.8rem;
+    margin-bottom: 0;
+}
+
 .crosshair {
     position: absolute;
     top: 50%;
@@ -236,9 +260,36 @@ p {
     50% { transform: rotate(45deg); }
 }
 
+#fullscreen-btn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    pointer-events: all;
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+    .glass-card {
+        transform: scale(0.8);
+    }
+}
+
 @media (max-width: 768px) {
     .glass-card {
         padding: 2rem;
     }
     h1 { font-size: 2rem; }
+    
+    .info-panel {
+        font-size: 0.8rem;
+        max-width: 150px;
+    }
 }
+

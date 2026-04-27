@@ -29,7 +29,8 @@ class App {
             targetName: document.getElementById('target-name'),
             targetDesc: document.getElementById('target-description'),
             startBtn: document.getElementById('start-btn'),
-            calibrateBtn: document.getElementById('calibrate-btn')
+            calibrateBtn: document.getElementById('calibrate-btn'),
+            fullscreenBtn: document.getElementById('fullscreen-btn')
         };
 
         this.init();
@@ -38,6 +39,7 @@ class App {
     init() {
         this.ui.startBtn.addEventListener('click', () => this.requestPermissions());
         this.ui.calibrateBtn.addEventListener('click', () => this.startExperience());
+        this.ui.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
         
         // Set initial camera position
         this.sbsRenderer.camera.position.set(0, 5, 20);
@@ -46,25 +48,44 @@ class App {
         this.animate();
     }
 
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
     async requestPermissions() {
         // Handle iOS DeviceOrientation permissions
-        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
             try {
                 const permission = await DeviceOrientationEvent.requestPermission();
                 if (permission === 'granted') {
                     this.cameraController.enable();
+                    this.goToCalibration();
+                } else {
+                    alert("Sensor permission denied. Manual rotation enabled.");
+                    this.goToCalibration();
                 }
             } catch (error) {
-                console.error("Device orientation permission denied", error);
+                console.error("Device orientation permission error", error);
+                this.goToCalibration();
             }
         } else {
             // Android or other browsers
             this.cameraController.enable();
+            this.goToCalibration();
         }
+    }
 
+    goToCalibration() {
         this.ui.onboarding.classList.remove('active');
         this.ui.calibration.classList.add('active');
     }
+
 
     startExperience() {
         this.cameraController.calibrate();
