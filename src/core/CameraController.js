@@ -53,7 +53,8 @@ export class CameraController {
     }
 
     onMouseMove(event) {
-        if (this.enabled) return; // Prioritize device orientation if active
+        // Allow mouse rotation if no sensor data is being received (useful for desktop testing)
+        if (this.enabled && this.rawSensor) return; 
 
         const x = (event.clientX / window.innerWidth) - 0.5;
         const y = (event.clientY / window.innerHeight) - 0.5;
