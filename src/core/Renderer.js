@@ -9,16 +9,13 @@ export class SBSRenderer {
         this.renderer.autoClear = false;
         this.container.appendChild(this.renderer.domElement);
 
-        // Parameters for Stereo
-        this.eyeSeparation = 0.064; // Average human eye separation in meters
-        this.focalLength = 15;
-        
-        // Cameras
-        this.cameraL = new THREE.PerspectiveCamera(70, window.innerWidth / 2 / window.innerHeight, 0.1, 1000);
-        this.cameraR = new THREE.PerspectiveCamera(70, window.innerWidth / 2 / window.innerHeight, 0.1, 1000);
-        
-        // Virtual camera for orientation tracking
+        // Main tracking camera
         this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+        // Stereo Camera handler
+        this.stereo = new THREE.StereoCamera();
+        this.stereo.aspect = 0.5; // Each eye is half width
+        this.stereo.eyeSep = 0.064; // IPD in meters
         
         window.addEventListener('resize', () => this.onWindowResize());
     }
@@ -30,12 +27,6 @@ export class SBSRenderer {
         
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
-
-        this.cameraL.aspect = (width / 2) / height;
-        this.cameraL.updateProjectionMatrix();
-        
-        this.cameraR.aspect = (width / 2) / height;
-        this.cameraR.updateProjectionMatrix();
     }
 
     render(scene) {
@@ -44,28 +35,23 @@ export class SBSRenderer {
 
         this.renderer.clear();
 
-        // Update Left/Right cameras based on main camera
-        this.cameraL.position.copy(this.camera.position);
-        this.cameraL.quaternion.copy(this.camera.quaternion);
-        this.cameraL.translateX(-this.eyeSeparation / 2);
-
-        this.cameraR.position.copy(this.camera.position);
-        this.cameraR.quaternion.copy(this.camera.quaternion);
-        this.cameraR.translateX(this.eyeSeparation / 2);
+        // Update stereo projection
+        this.stereo.update(this.camera);
 
         // Render Left Eye
         this.renderer.setScissorTest(true);
         this.renderer.setScissor(0, 0, width / 2, height);
         this.renderer.setViewport(0, 0, width / 2, height);
-        this.renderer.render(scene, this.cameraL);
+        this.renderer.render(scene, this.stereo.cameraL);
 
         // Render Right Eye
         this.renderer.setScissor(width / 2, 0, width / 2, height);
         this.renderer.setViewport(width / 2, 0, width / 2, height);
-        this.renderer.render(scene, this.cameraR);
+        this.renderer.render(scene, this.stereo.cameraR);
 
         this.renderer.setScissorTest(false);
     }
+
 
     getDomElement() {
         return this.renderer.domElement;
