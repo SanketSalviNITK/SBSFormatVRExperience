@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBS-VR Immersive Educational Experience</title>
+    <meta name="description" content="A stereoscopic browser-based educational game powered by Three.js and mobile head tracking.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Canvas Container for Three.js -->
+        <div id="canvas-container"></div>
+
+        <!-- Glassmorphic UI Overlays -->
+        <div id="ui-layer">
+            <!-- Start Screen -->
+            <section id="onboarding" class="overlay active">
+                <div class="glass-card">
+                    <h1>Cosmos Explorer</h1>
+                    <p>Enter a spatial educational journey. Use your mobile device as a window into another dimension.</p>
+                    <div class="setup-steps">
+                        <div class="step">
+                            <span class="icon">📱</span>
+                            <p>Calibration required for mobile tracking</p>
+                        </div>
+                        <div class="step">
+                            <span class="icon">🕶️</span>
+                            <p>Works best with mobile VR viewers (optional)</p>
+                        </div>
+                    </div>
+                    <button id="start-btn" class="primary-btn">Initialize Experience</button>
+                </div>
+            </section>
+
+            <!-- Calibration Screen -->
+            <section id="calibration" class="overlay">
+                <div class="glass-card">
+                    <h2>Calibration</h2>
+                    <p>Hold your device steady and tap the button below to set your neutral orientation.</p>
+                    <div class="calibration-visual">
+                        <div class="phone-outline"></div>
+                    </div>
+                    <button id="calibrate-btn" class="secondary-btn">Calibrate Sensors</button>
+                </div>
+            </section>
+
+            <!-- HUD / Info Panels -->
+            <div id="hud" class="hidden">
+                <div class="info-panel glass-panel top-right">
+                    <h3 id="target-name">Solar System</h3>
+                    <p id="target-description">Gaze at an object to learn more.</p>
+                </div>
+                <div class="stats-panel glass-panel bottom-left">
+                    <div id="score-container">Score: <span id="score">0</span></div>
+                    <div id="discovery-status">Discovered: <span id="discovered">0</span>/8</div>
+                </div>
+                <div class="crosshair"></div>
+            </div>
+
+            <!-- Quiz Overlay -->
+            <section id="quiz-container" class="overlay">
+                <div class="glass-card quiz-card">
+                    <h2 id="quiz-question">Question?</h2>
+                    <div id="quiz-options" class="options-grid"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
